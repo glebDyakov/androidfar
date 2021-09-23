@@ -6,7 +6,11 @@ import android.graphics.Color;
 import android.graphics.ColorSpace;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,6 +31,7 @@ public class ListActivity extends AppCompatActivity {
     public ArrayList<HashMap<String, Object>> myFiles;
     public String measure = "Мб";
     public Long countOfMeasure = 0l;
+    public boolean checkboxesVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +152,7 @@ public class ListActivity extends AppCompatActivity {
 
                         CheckBox checkbox = new CheckBox(ListActivity.this);
                         checkbox.setText("");
+                        checkbox.setVisibility(View.INVISIBLE);
                         ImageView fileIcon = new ImageView(ListActivity.this);
                         fileIcon.setImageResource(R.drawable.home);
                         fileIcon.setImageTintList(ColorStateList.valueOf(Color.argb(100, 145, 145, 145)));
@@ -191,6 +197,24 @@ public class ListActivity extends AppCompatActivity {
                             }
                         });
 
+                        layoutOfFile.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+
+                            @Override
+                            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+//                                menu.add(Menu.NONE, 101, Menu.NONE, "Открыть");
+//                                menu.add(Menu.NONE, 102, Menu.NONE, "Сохранить");
+
+                                checkboxesVisible = true;
+                                for(int fileCheckboxIdx = 0; fileCheckboxIdx < layoutOfFiles.getChildCount(); fileCheckboxIdx++){
+                                    LinearLayout localLayout = (LinearLayout)layoutOfFiles.getChildAt(fileCheckboxIdx);
+                                    localLayout.getChildAt(0).setVisibility(View.VISIBLE);
+                                }
+
+                            }
+
+                        });
+
                         layoutOfFile.addView(checkbox);
                         layoutOfFile.addView(fileIcon);
                         layoutOfFile.addView(fileName);
@@ -209,6 +233,21 @@ public class ListActivity extends AppCompatActivity {
             Log.d("mytag", "ошибка ассинхронной задачи");
         }
 
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        menu.add(Menu.NONE, Integer.parseInt("Выбран пункт Открыть"), Menu.NONE, "Открыть");
+        menu.add(Menu.NONE, Integer.parseInt("Выбран пункт Сохранить"), Menu.NONE, "Сохранить");
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        Log.d("mytag", String.valueOf(item.getItemId()));
+        return true;
     }
 
 }
