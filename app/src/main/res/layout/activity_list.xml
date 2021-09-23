@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scaleX="1"
+    android:scaleY="1">
+
+    <TextView
+        android:id="@+id/currentPath"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Изображения"
+        android:textColor="#FF9800"
+        android:textStyle="bold"
+        android:translationX="-25dp"
+        android:translationY="-285dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/folderSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="261 Мб"
+        android:textStyle="bold"
+        android:translationX="145dp"
+        android:translationY="-285dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/separator"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:translationX="-100dp"
+        android:translationY="-285dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/pathseparator" />
+
+    <ImageButton
+        android:id="@+id/homeBtn"
+        android:layout_width="52dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="339dp"
+        android:layout_marginBottom="664dp"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:translationX="25dp"
+        android:translationY="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/home"
+        app:tint="#919191"
+        tools:ignore="SpeakableTextPresentCheck"
+        android:contentDescription="TODO" />
+
+    <ScrollView
+        android:id="@+id/scrollOfLayoutOfFiles"
+        android:layout_width="match_parent"
+        android:layout_height="585dp"
+        android:translationY="70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck">
+
+        <LinearLayout
+            android:id="@+id/layoutOfFiles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

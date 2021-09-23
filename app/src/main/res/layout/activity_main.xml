@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ImageButton
+        android:id="@+id/imageBtn"
+        android:layout_width="35dp"
+        android:layout_height="45dp"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:translationX="-100dp"
+        android:translationY="-125dp"
+        android:translationZ="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/image"
+        app:tint="#FF5722"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <ImageButton
+        android:id="@+id/videoBtn"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:translationX="-15dp"
+        android:translationY="-125dp"
+        android:translationZ="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/video"
+        app:tint="#9C27B0"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,DuplicateClickableBoundsCheck" />
+
+    <ImageButton
+        android:id="@+id/audioBtn"
+        android:layout_width="35dp"
+        android:layout_height="45dp"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:translationX="85dp"
+        android:translationY="-125dp"
+        android:translationZ="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/music"
+        app:tint="#3F51B5"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <ImageButton
+        android:id="@+id/documentBtn"
+        android:layout_width="35dp"
+        android:layout_height="45dp"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:translationX="-100dp"
+        android:translationY="-45dp"
+        android:translationZ="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/document"
+        app:tint="#FF9800"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <ImageButton
+        android:id="@+id/downloadBtn"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:scaleType="center"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:translationX="-15dp"
+        android:translationY="-45dp"
+        android:translationZ="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/download"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,DuplicateClickableBoundsCheck"
+        app:tint="#00BCD4" />
+
+    <ImageButton
+        android:id="@+id/apkBtn"
+        android:layout_width="35dp"
+        android:layout_height="45dp"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:translationX="85dp"
+        android:translationY="-45dp"
+        android:translationZ="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/apkfile"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <ImageView
+        android:id="@+id/clockIcon"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="363dp"
+        android:translationX="75dp"
+        android:translationY="100dp"
+        android:translationZ="3dp"
+        app:layout_constraintBottom_toTopOf="@+id/background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/clock"
+        app:tint="#FF9800" />
+
+    <Button
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:backgroundTint="#EBEBEB"
+        android:translationX="0dp"
+        android:translationY="0dp"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="#B1ADAD"
+        app:strokeWidth="1dp"
+        tools:ignore="SpeakableTextPresentCheck,DuplicateClickableBoundsCheck" />
+
+    <Button
+        android:id="@+id/recentFilesWindow"
+        android:layout_width="275dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="323dp"
+        android:layout_marginBottom="683dp"
+        android:backgroundTint="#FFFFFF"
+        android:translationX="150dp"
+        android:translationY="75dp"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="#B1ADAD"
+        app:strokeWidth="1dp"
+        tools:ignore="SpeakableTextPresentCheck,DuplicateClickableBoundsCheck" />
+
+    <TextView
+        android:id="@+id/recentFiles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Последние файлы"
+        android:textSize="18sp"
+        android:translationY="-265dp"
+        android:translationZ="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/categoriesWindow"
+        android:layout_width="275dp"
+        android:layout_height="225dp"
+        android:layout_marginEnd="323dp"
+        android:layout_marginBottom="683dp"
+        android:backgroundTint="#FFFFFF"
+        android:translationX="150dp"
+        android:translationY="245dp"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="#B1ADAD"
+        app:strokeWidth="1dp"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/categories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Категории"
+        android:textSize="18sp"
+        android:translationX="-100dp"
+        android:translationY="-175dp"
+        android:translationZ="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/storageWindow"
+        android:layout_width="275dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="323dp"
+        android:layout_marginBottom="683dp"
+        android:backgroundTint="#FFFFFF"
+        android:translationX="150dp"
+        android:translationY="475dp"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="#B1ADAD"
+        app:strokeWidth="1dp"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/storage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Память устройства"
+        android:textSize="18sp"
+        android:translationX="-50dp"
+        android:translationY="115dp"
+        android:translationZ="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/analyzeBtn"
+        android:layout_width="275dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="323dp"
+        android:layout_marginBottom="683dp"
+        android:backgroundTint="#ECBD31"
+        android:text="Анализ хранилища"
+        android:translationX="150dp"
+        android:translationY="625dp"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="#B1ADAD"
+        app:strokeWidth="1dp"
+        tools:ignore="SpeakableTextPresentCheck,DuplicateClickableBoundsCheck" />
+
+    <TextView
+        android:id="@+id/analyzeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Узнайте, что занимает место в памяти телефона"
+        android:translationX="0dp"
+        android:translationY="225dp"
+        android:translationZ="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/storageLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="31,26 Гб / 32,00 Гб "
+        android:translationX="0dp"
+        android:translationY="155dp"
+        android:translationZ="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
