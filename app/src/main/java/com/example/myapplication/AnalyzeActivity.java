@@ -11,7 +11,7 @@ public class AnalyzeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_analyze);
 
         ImageButton imageBtn = findViewById(R.id.imageBtn);
         imageBtn.setOnClickListener(new View.OnClickListener() {

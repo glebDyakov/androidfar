@@ -50,20 +50,18 @@
         android:id="@+id/homeBtn"
         android:layout_width="52dp"
         android:layout_height="48dp"
-        android:layout_marginEnd="339dp"
-        android:layout_marginBottom="664dp"
+        android:contentDescription="TODO"
         android:scaleX="0.7"
         android:scaleY="0.7"
-        android:translationX="25dp"
-        android:translationY="45dp"
+        android:translationX="-150dp"
+        android:translationY="-285dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/home"
         app:tint="#919191"
-        tools:ignore="SpeakableTextPresentCheck"
-        android:contentDescription="TODO" />
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <ScrollView
         android:id="@+id/scrollOfLayoutOfFiles"
