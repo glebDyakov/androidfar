@@ -1,12 +1,12 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ListActivity.class);
                 intent.putExtra("filesType", "none");
+                intent.putExtra("currentPath", getApplicationContext().getCacheDir().getPath());
                 MainActivity.this.startActivity(intent);
             }
         });
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ListActivity.class);
                 intent.putExtra("filesType", "images");
+                intent.putExtra("currentPath", getApplicationContext().getCacheDir().getPath());
                 MainActivity.this.startActivity(intent);
             }
         });
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ListActivity.class);
                 intent.putExtra("filesType", "videos");
+                intent.putExtra("currentPath", getApplicationContext().getCacheDir().getPath());
                 MainActivity.this.startActivity(intent);
             }
         });
@@ -51,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ListActivity.class);
                 intent.putExtra("filesType", "audios");
+                intent.putExtra("currentPath", getApplicationContext().getCacheDir().getPath());
                 MainActivity.this.startActivity(intent);
             }
         });
@@ -61,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ListActivity.class);
                 intent.putExtra("filesType", "documents");
+                intent.putExtra("currentPath", getApplicationContext().getCacheDir().getPath());
                 MainActivity.this.startActivity(intent);
             }
         });
@@ -71,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ListActivity.class);
                 intent.putExtra("filesType", "downloads");
+                intent.putExtra("currentPath", getApplicationContext().getCacheDir().getPath());
                 MainActivity.this.startActivity(intent);
             }
         });
@@ -81,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ListActivity.class);
                 intent.putExtra("filesType", "apks");
+                intent.putExtra("currentPath", getApplicationContext().getCacheDir().getPath());
                 MainActivity.this.startActivity(intent);
             }
         });

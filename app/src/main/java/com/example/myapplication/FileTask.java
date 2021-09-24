@@ -17,10 +17,10 @@ public class FileTask extends AsyncTask<String, Integer, File[]> {
     }
 
     @Override
-    protected File[] doInBackground(String... path) {
-        String responseJson = "";
-
-        File[] files = context.getCacheDir().listFiles();
+    protected File[] doInBackground(String... paths) {
+//        File[] files = context.getCacheDir().listFiles();
+        File[] files = new File(paths[0]).listFiles();
+//        File[] files = Files (paths[0]).listFiles();
 //        File[] files = context.getFilesDir().listFiles();
 
         return files;

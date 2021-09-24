@@ -1,8 +1,11 @@
 package com.example.myapplication;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -15,10 +18,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -32,7 +39,10 @@ public class ListActivity extends AppCompatActivity {
     public boolean checkboxesVisible = false;
     public String filesType = "none";
     public String supportedExtensions = "";
+    public String currentPath;
+    public String extension = "folder";
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +51,7 @@ public class ListActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             filesType = extras.getString("filesType");
+            currentPath = extras.getString("currentPath");
             if(filesType.contains("image")){
                 supportedExtensions += " " + "png jpg jpeg gif tiff tga psd ai";
             } else if(filesType.contains("document")){
@@ -90,6 +101,7 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("mytag", "удаляю");
+
             }
         });
 
@@ -191,7 +203,10 @@ public class ListActivity extends AppCompatActivity {
 
         File[] listOfFiles = null;
         try {
-            listOfFiles = new FileTask(getApplicationContext()).execute("url").get();
+            Log.d("mytag", "currentPath: " + currentPath);
+//            listOfFiles = new FileTask(getApplicationContext()).execute("url").get();
+            listOfFiles = new FileTask().execute(currentPath).get();
+
             if(listOfFiles.length >= 1) {
                 Log.d("mytag", "файлов много");
 
@@ -200,15 +215,13 @@ public class ListActivity extends AppCompatActivity {
                 for(File fileInDir : listOfFiles){
                     Log.d("mytag", "имя файла: " + fileInDir.getName() + "размер файла: " + fileInDir.getTotalSpace());
 
-                    String extension = "folder";
-
                     int resultOfExtension = fileInDir.getName().lastIndexOf('.');
                     if (resultOfExtension > 0) {
                         extension = fileInDir.getName().substring(resultOfExtension + 1);
                     }
                     Log.d("mytag", "Расширение файла: " + extension);
 
-                    if(supportedExtensions.contains(extension)) {
+                    if(supportedExtensions.contains(extension) || extension.contains("folder")) {
                         LinearLayout layoutOfFile = new LinearLayout(ListActivity.this);
                         cursorOfFiles++;
                         layoutOfFile.setContentDescription(String.valueOf(cursorOfFiles));
@@ -221,8 +234,44 @@ public class ListActivity extends AppCompatActivity {
                         CheckBox checkbox = new CheckBox(ListActivity.this);
                         checkbox.setText("");
                         checkbox.setVisibility(View.INVISIBLE);
+
                         ImageView fileIcon = new ImageView(ListActivity.this);
                         fileIcon.setImageResource(R.drawable.home);
+                        fileIcon.setContentDescription(extension);
+
+//                        if(Files.probeContentType(fileInDir.toPath()).contains("image/")) {
+//                            fileIcon.setImageResource(R.drawable.image);
+//                        } else if(Files.probeContentType(fileInDir.toPath()).contains("application/octet")) {
+//                            fileIcon.setImageResource(R.drawable.download);
+//                        } else if(Files.probeContentType(fileInDir.toPath()).contains("application/vnd.android.package")) {
+//                            fileIcon.setImageResource(R.drawable.apkfile);
+//                        } else if(Files.probeContentType(fileInDir.toPath()).contains("audio/")) {
+//                            fileIcon.setImageResource(R.drawable.music);
+//                        } else if(Files.probeContentType(fileInDir.toPath()).contains("video/")) {
+//                            fileIcon.setImageResource(R.drawable.video);
+//                        } else if(Files.probeContentType(fileInDir.toPath()).contains("text/")) {
+//                            fileIcon.setImageResource(R.drawable.document);
+//                        } else {
+//                            fileIcon.setImageResource(R.drawable.home);
+//                        }
+
+                        if(extension.contains("png") || extension.contains("jpg") || extension.contains("jpeg") || extension.contains("gif")) {
+                            fileIcon.setImageResource(R.drawable.image);
+                        } else if(extension.contains("torrent")) {
+                            fileIcon.setImageResource(R.drawable.download);
+                        } else if(extension.contains("apk")) {
+                            fileIcon.setImageResource(R.drawable.apkfile);
+                        } else if(extension.contains("mp3") || extension.contains("wav") || extension.contains("ogg")) {
+                            fileIcon.setImageResource(R.drawable.music);
+                        } else if(extension.contains("mp4") || extension.contains("flv") || extension.contains("dooh")) {
+                            fileIcon.setImageResource(R.drawable.video);
+                        } else if(extension.contains("txt") || extension.contains("doc") || extension.contains("pdf")) {
+                            fileIcon.setImageResource(R.drawable.document);
+                        } else {
+                            fileIcon.setImageResource(R.drawable.home);
+                        }
+//                        fileIcon.setImageResource(R.drawable.home);
+
                         fileIcon.setImageTintList(ColorStateList.valueOf(Color.argb(100, 145, 145, 145)));
                         fileIcon.setLayoutParams(fileLayoutParams);
                         fileIcon.setScaleType(ImageView.ScaleType.FIT_START);
@@ -261,12 +310,29 @@ public class ListActivity extends AppCompatActivity {
 
                         layoutOfFile.setOrientation(LinearLayout.HORIZONTAL);
                         layoutOfFile.setOnClickListener(new View.OnClickListener() {
+                            @RequiresApi(api = Build.VERSION_CODES.O)
                             @Override
                             public void onClick(View v) {
                                 if(!checkboxesVisible){
-                                    Log.d("mytag", "Переходим к папке: " + fileInDir.getName());
-                                    Intent intent = new Intent(ListActivity.this, ListActivity.class);
-                                    ListActivity.this.startActivity(intent);
+                                    LinearLayout currentLayout = (LinearLayout) layoutOfFiles.getChildAt(Integer.valueOf(v.getContentDescription().toString()));
+                                    if(currentLayout.getChildAt(1).getContentDescription().toString().contains("folder")) {
+                                        Log.d("mytag", "Переходим к папке: " + fileInDir.getName());
+                                        Intent intent = new Intent(ListActivity.this, ListActivity.class);
+                                        intent.putExtra("filesType", "none");
+                                        intent.putExtra("currentPath", currentPath + fileInDir.getName());
+                                        ListActivity.this.startActivity(intent);
+                                    } else {
+                                        Log.d("mytag", "Открываем файл: " + fileInDir.getName());
+
+                                        try {
+                                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                                            intent.setDataAndType(Uri.fromFile(fileInDir), Files.probeContentType(Paths.get(fileInDir.getPath())));
+                                            startActivity(intent);
+                                        } catch (ActivityNotFoundException | IOException e) {
+                                            Log.d("mytag", "Не получилось открыть файл: " + fileInDir.getName());
+                                        }
+
+                                    }
                                 }
                             }
                         });
