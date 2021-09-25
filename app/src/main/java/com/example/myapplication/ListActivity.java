@@ -28,12 +28,15 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 public class ListActivity extends AppCompatActivity {
 
+    public LinearLayout moveWindow;
     public LinearLayout layoutOfFiles;
     public LinearLayout operations;
     public ArrayList<HashMap<String, Object>> myFiles;
@@ -58,6 +61,29 @@ public class ListActivity extends AppCompatActivity {
         if(extras != null) {
             filesType = extras.getString("filesType");
             currentPath = extras.getString("currentPath");
+
+            moveWindow = findViewById(R.id.moveWindow);
+            TextView cancelBtn = findViewById(R.id.cancelBtn);
+            cancelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    moveWindow.setVisibility(View.INVISIBLE);
+                }
+            });
+
+            TextView moveHereBtn = findViewById(R.id.movHereBtn);
+            cancelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    for(CheckBox selectedCheckBox : selectedCheckBoxes){
+                        Integer layoutIdx = selectedCheckBoxes.indexOf(selectedCheckBox);
+                        if(selectedCheckBox.isChecked()) {
+                            currentFiles.get(layoutIdx).renameTo(new File(currentPath));
+                        }
+                    }
+                    moveWindow.setVisibility(View.INVISIBLE);
+                }
+            });
 
             TextView currentPathSeparator = findViewById(R.id.currentPath);
 //            int resultOfSeparator = currentPathSeparator.getText().toString().lastIndexOf('/');
@@ -90,6 +116,20 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("mytag", "перемещаю");
+                for(CheckBox selectedCheckBox : selectedCheckBoxes){
+                    Integer layoutIdx = selectedCheckBoxes.indexOf(selectedCheckBox);
+                    if(selectedCheckBox.isChecked()){
+                        Log.d("mytag", "подходит индекс: " + currentFiles.get(layoutIdx).getName());
+//                        currentFiles.get(layoutIdx).renameTo(new File());
+                        moveWindow.setVisibility(View.VISIBLE);
+                        operations.setVisibility(View.INVISIBLE);
+                        for (CheckBox checkBx : selectedCheckBoxes){
+                            checkBx.setVisibility(View.INVISIBLE);
+                        }
+                    } else {
+                        Log.d("mytag", "неподходит индекс: " + currentFiles.get(layoutIdx).getName());
+                    }
+                }
             }
         });
         ImageButton copyBtn = findViewById(R.id.copyBtn);
@@ -110,15 +150,26 @@ public class ListActivity extends AppCompatActivity {
         });
         ImageButton infoBtn = findViewById(R.id.infoBtn);
         infoBtn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v){
                 Log.d("mytag", "даю инфо");
                 for(CheckBox selectedCheckBox : selectedCheckBoxes){
                     Integer layoutIdx = selectedCheckBoxes.indexOf(selectedCheckBox);
                     if(selectedCheckBox.isChecked()){
+
                         Log.d("mytag", "подходит индекс: " + currentFiles.get(layoutIdx).getName());
 //                        String toastMessage = "Свойства \n" + "\nИмя \n" + currentFiles.get(Integer.valueOf(v.getContentDescription().toString())).getName().toString() + "размер \n" + currentFiles.get(Integer.valueOf(v.getContentDescription().toString())).length() + "\nПоследнее изменение \n" + currentFiles.get(Integer.valueOf(v.getContentDescription().toString())).getPath().toString() + "\nПуть \n" + currentFiles.get(Integer.valueOf(v.getContentDescription().toString())).getPath().toString();
-                        String toastMessage = "Свойства \n" + "\nИмя \n" + currentFiles.get(layoutIdx).getName().toString() + "\nразмер \n" + currentFiles.get(layoutIdx).length() + "\nПоследнее изменение \n" + new Date(currentFiles.get(layoutIdx).lastModified() * 1000).getYear() + "\nПуть \n" + currentFiles.get(layoutIdx).getPath().toString();
+
+//                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // the format of your date
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z"); // the format of your date
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                            sdf = new SimpleDateFormat("dd MM YYYY г. HH:mm z");
+                        }
+                        sdf.setTimeZone(TimeZone.getTimeZone("GMT-4")); // give a timezone reference for formating (see comment at the bottom
+                        String formattedDate = sdf.format(new Date(currentFiles.get(layoutIdx).lastModified() * 1000L));
+
+                        String toastMessage = "Свойства \n" + "\nИмя \n" + currentFiles.get(layoutIdx).getName().toString() + "\nразмер \n" + currentFiles.get(layoutIdx).length() + "\nПоследнее изменение \n" + formattedDate + "\nПуть \n" + currentFiles.get(layoutIdx).getPath().toString();
                         Toast toast = Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT);
                         toast.show();
                     } else {
@@ -141,7 +192,24 @@ public class ListActivity extends AppCompatActivity {
                 Log.d("mytag", "удаляю");
 //                .delete();
 //                LinearLayout currentLayout = (LinearLayout) layoutOfFiles.getChildAt(Integer.valueOf(v.getContentDescription().toString()));
-                currentFiles.get(Integer.valueOf(v.getContentDescription().toString())).delete();
+
+//                currentFiles.get(Integer.valueOf(v.getContentDescription().toString())).delete();
+
+                for(CheckBox selectedCheckBox : selectedCheckBoxes){
+                    Integer layoutIdx = selectedCheckBoxes.indexOf(selectedCheckBox);
+                    if(selectedCheckBox.isChecked()){
+                        Log.d("mytag", "подходит индекс: " + currentFiles.get(layoutIdx).getName());
+                        currentFiles.get(layoutIdx).delete();
+                        layoutOfFiles.removeViewAt(layoutIdx);
+                        operations.setVisibility(View.INVISIBLE);
+                        for(CheckBox subSelectedCheckBox : selectedCheckBoxes){
+                            subSelectedCheckBox.setVisibility(View.INVISIBLE);
+                        }
+                    } else {
+                        Log.d("mytag", "неподходит индекс: " + currentFiles.get(layoutIdx).getName());
+                    }
+                }
+
             }
         });
 
@@ -284,11 +352,22 @@ public class ListActivity extends AppCompatActivity {
                         checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                             @Override
                             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+//                                for(CheckBox selectedCheckBox : selectedCheckBoxes){
+//                                    if(String.valueOf(selectedCheckBox.getId()).contains(String.valueOf(buttonView.getId()))){
+////                                        = isChecked;
+//                                    }
+//                                }
+
+                                ArrayList<CheckBox> localCheckboxes = new ArrayList<CheckBox>();
                                 for(CheckBox selectedCheckBox : selectedCheckBoxes){
-                                    if(String.valueOf(selectedCheckBox.getId()).contains(String.valueOf(buttonView.getId()))){
-//                                        = isChecked;
+                                    if(selectedCheckBox.isChecked()) {
+                                        localCheckboxes.add(selectedCheckBox);
                                     }
                                 }
+                                TextView countOfItems = findViewById(R.id.countOfItems);
+                                countOfItems.setText(String.valueOf(localCheckboxes.size()));
+
                             }
                         });
 
