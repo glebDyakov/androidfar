@@ -13,10 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +29,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class ListActivity extends AppCompatActivity {
@@ -41,6 +44,9 @@ public class ListActivity extends AppCompatActivity {
     public String supportedExtensions = "";
     public String currentPath;
     public String extension = "folder";
+    public ArrayList<File> currentFiles;
+    public ArrayList<CheckBox> selectedCheckBoxes;
+    public ArrayList<Integer> selectedFiles;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -52,6 +58,17 @@ public class ListActivity extends AppCompatActivity {
         if(extras != null) {
             filesType = extras.getString("filesType");
             currentPath = extras.getString("currentPath");
+
+            TextView currentPathSeparator = findViewById(R.id.currentPath);
+//            int resultOfSeparator = currentPathSeparator.getText().toString().lastIndexOf('/');
+//            String lastFolder = "Изображения";
+//            String lastFolder = "abc";
+//            if (resultOfSeparator > 0) {
+//                lastFolder = currentPathSeparator.getText().toString().substring(resultOfSeparator + 1);
+//            }
+//            currentPathSeparator.setText(lastFolder);
+            currentPathSeparator.setText(currentPath.split("/")[currentPath.split("/").length - 1]);
+
             if(filesType.contains("image")){
                 supportedExtensions += " " + "png jpg jpeg gif tiff tga psd ai";
             } else if(filesType.contains("document")){
@@ -78,15 +95,36 @@ public class ListActivity extends AppCompatActivity {
         ImageButton copyBtn = findViewById(R.id.copyBtn);
         copyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v){
                 Log.d("mytag", "Копирую");
+//                Log.d("mytag", "индекс: " + );
+                for(CheckBox selectedCheckBox : selectedCheckBoxes){
+                    Integer layoutIdx = selectedCheckBoxes.indexOf(selectedCheckBox);
+                    if(selectedCheckBox.isChecked()){
+                        Log.d("mytag", "подходит индекс: " + currentFiles.get(layoutIdx).getName());
+                    } else {
+                        Log.d("mytag", "неподходит индекс: " + currentFiles.get(layoutIdx).getName());
+                    }
+                }
             }
         });
         ImageButton infoBtn = findViewById(R.id.infoBtn);
         infoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v){
                 Log.d("mytag", "даю инфо");
+                for(CheckBox selectedCheckBox : selectedCheckBoxes){
+                    Integer layoutIdx = selectedCheckBoxes.indexOf(selectedCheckBox);
+                    if(selectedCheckBox.isChecked()){
+                        Log.d("mytag", "подходит индекс: " + currentFiles.get(layoutIdx).getName());
+//                        String toastMessage = "Свойства \n" + "\nИмя \n" + currentFiles.get(Integer.valueOf(v.getContentDescription().toString())).getName().toString() + "размер \n" + currentFiles.get(Integer.valueOf(v.getContentDescription().toString())).length() + "\nПоследнее изменение \n" + currentFiles.get(Integer.valueOf(v.getContentDescription().toString())).getPath().toString() + "\nПуть \n" + currentFiles.get(Integer.valueOf(v.getContentDescription().toString())).getPath().toString();
+                        String toastMessage = "Свойства \n" + "\nИмя \n" + currentFiles.get(layoutIdx).getName().toString() + "\nразмер \n" + currentFiles.get(layoutIdx).length() + "\nПоследнее изменение \n" + new Date(currentFiles.get(layoutIdx).lastModified() * 1000).getYear() + "\nПуть \n" + currentFiles.get(layoutIdx).getPath().toString();
+                        Toast toast = Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else {
+                        Log.d("mytag", "неподходит индекс: " + currentFiles.get(layoutIdx).getName());
+                    }
+                }
             }
         });
         ImageButton shareBtn = findViewById(R.id.shareBtn);
@@ -101,7 +139,9 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("mytag", "удаляю");
-
+//                .delete();
+//                LinearLayout currentLayout = (LinearLayout) layoutOfFiles.getChildAt(Integer.valueOf(v.getContentDescription().toString()));
+                currentFiles.get(Integer.valueOf(v.getContentDescription().toString())).delete();
             }
         });
 
@@ -210,6 +250,10 @@ public class ListActivity extends AppCompatActivity {
             if(listOfFiles.length >= 1) {
                 Log.d("mytag", "файлов много");
 
+                selectedCheckBoxes = new ArrayList<>();
+                currentFiles = new ArrayList<>();
+//                selectedFiles = new ArrayList<>();
+
                 int cursorOfFiles = -1;
 //                for(File fileInDir : getApplicationContext().getCacheDir().listFiles()){
                 for(File fileInDir : listOfFiles){
@@ -223,8 +267,10 @@ public class ListActivity extends AppCompatActivity {
 
                     if(supportedExtensions.contains(extension) || extension.contains("folder")) {
                         LinearLayout layoutOfFile = new LinearLayout(ListActivity.this);
+                        currentFiles.add(fileInDir);
                         cursorOfFiles++;
                         layoutOfFile.setContentDescription(String.valueOf(cursorOfFiles));
+                        Log.d("mytag", "layoutOfFile.getContentDescription(): " + layoutOfFile.getContentDescription());
                         ConstraintLayout.LayoutParams fileLayoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
 //                        ConstraintLayout.LayoutParams fileLayoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, 125);
 //                        fileLayoutParams.setMargins(5,75,5, 75);
@@ -234,6 +280,17 @@ public class ListActivity extends AppCompatActivity {
                         CheckBox checkbox = new CheckBox(ListActivity.this);
                         checkbox.setText("");
                         checkbox.setVisibility(View.INVISIBLE);
+                        selectedCheckBoxes.add(checkbox);
+                        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                for(CheckBox selectedCheckBox : selectedCheckBoxes){
+                                    if(String.valueOf(selectedCheckBox.getId()).contains(String.valueOf(buttonView.getId()))){
+//                                        = isChecked;
+                                    }
+                                }
+                            }
+                        });
 
                         ImageView fileIcon = new ImageView(ListActivity.this);
                         fileIcon.setImageResource(R.drawable.home);
@@ -318,8 +375,9 @@ public class ListActivity extends AppCompatActivity {
                                     if(currentLayout.getChildAt(1).getContentDescription().toString().contains("folder")) {
                                         Log.d("mytag", "Переходим к папке: " + fileInDir.getName());
                                         Intent intent = new Intent(ListActivity.this, ListActivity.class);
-                                        intent.putExtra("filesType", "none");
-                                        intent.putExtra("currentPath", currentPath + fileInDir.getName());
+//                                        intent.putExtra("filesType", "none");
+                                        intent.putExtra("filesType", filesType);
+                                        intent.putExtra("currentPath", currentPath + "/" + fileInDir.getName());
                                         ListActivity.this.startActivity(intent);
                                     } else {
                                         Log.d("mytag", "Открываем файл: " + fileInDir.getName());
@@ -378,6 +436,8 @@ public class ListActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.d("mytag", "ошибка ассинхронной задачи");
         }
+
+        Log.d("mytag", "currentFiles: " + String.valueOf(currentFiles.size()));
 
     }
 
